@@ -1,0 +1,11 @@
+node_modules
+.DS_Store
+.clj-kondo
+.cpcache
+.lsp
+.shadow-cljs
+
+public/js
+public/cljs-runtime
+
+target

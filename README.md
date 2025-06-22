@@ -72,4 +72,12 @@ A minimalist ClojureScript DOM library with precise, signal-driven reactivity fo
 ```
 
 
+## Roadmap
+
+Roadmap to 0.2.0 (which will be a beta release)
+
+ - [ ] Make `reactive-fragment` a macro and improve its ergonomics (and maybe name)
+ - [ ] Evaluate when attribute is a signal and decide if it should be reactive or throw an error
+ - [ ] Find a good way to manage the `ref` problem for rendering libs in the DOM
+ - [ ] Stress test it
 

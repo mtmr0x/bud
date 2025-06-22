@@ -2,6 +2,8 @@
 
 A minimalist ClojureScript DOM library with precise, signal-driven reactivity for single-page applications.
 
+Built on real DOM elements with (powered by ClojureScript) vanilla JavaScript. No virtual DOM, no Shadow DOM, no compile step.
+
 ## Project status
 
 🚧 The project is in early-stage development. It is not yet ready for production use, but you can try it out and give feedback.

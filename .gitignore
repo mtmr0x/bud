@@ -4,6 +4,7 @@ node_modules
 .cpcache
 .lsp
 .shadow-cljs
+pom.properties
 
 public/js
 public/cljs-runtime

@@ -1,12 +1,13 @@
-{:project/version "0.1.2"
- :path ["src"]
+{:path ["src"]
  :deps {thheller/shadow-cljs {:mvn/version "3.1.7"}
         com.taoensso/telemere {:mvn/version "1.0.0-beta1"}}
  :name org.clojars.mat/bud
  :description "A minimalist, reactive DOM library for ClojureScript."
  :license {:name "MIT"}
  :aliases
- {:deploy {:extra-deps {slipset/deps-deploy {:mvn/version "0.2.2"}}
+ {:build {:deps {io.github.clojure/tools.build {:mvn/version "0.10.7"}}
+          :ns-default build}
+  :deploy {:extra-deps {slipset/deps-deploy {:mvn/version "0.2.2"}}
            :exec-fn deps-deploy.deps-deploy/deploy
            :exec-args {:installer :remote
                        :artifact "target/bud.jar"}}}}

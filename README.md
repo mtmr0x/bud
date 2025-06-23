@@ -13,7 +13,7 @@ No Virtual DOM, no Shadow DOM, no magic compiler.
 - Embraces **signals** for composable, explicit reactivity.
 - No Shadow DOM. No Virtual DOM. Just DOM.
 
-> _Bud is to reactivity what Clojure is to state: explicit, simple, and powerful._
+> _Bud is to reactivity what Clojure is to state: explicit, simple, and powerful (although still working on this last one 😅)._
 
 ---
 

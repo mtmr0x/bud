@@ -1,18 +1,151 @@
 # Bud 
 
-A minimalist ClojureScript DOM library with precise, signal-driven reactivity for single-page applications.
+**Bud** is a minimalist DOM library for ClojureScript.
+It lets you build reactive single-page applications using real DOM elements.
+No Virtual DOM, no Shadow DOM, no magic compiler.
 
-Built on real DOM elements with (powered by ClojureScript) vanilla JavaScript. No virtual DOM, no Shadow DOM, no compile step.
+---
+
+## ⚡ Why Bud?
+
+- Built directly on top of **vanilla JS** — no abstraction layers.
+- Uses **native DOM APIs** for actual elements, not proxies or clones.
+- Embraces **signals** for composable, explicit reactivity.
+- No Shadow DOM. No Virtual DOM. Just DOM.
+
+> _Bud is to reactivity what Clojure is to state: explicit, simple, and powerful._
+
+---
+
+## Table of Contents
+
+- [Project status](#project-status)
+- [Installation](#installation)
+- [Features and usage](#features-and-usage)
+  - [Creating signals (reactive text nodes)](#creating-signals-reactive-text-nodes)
+  - [Reactive fragments](#reactive-fragments)
+  - [Dynamic collections](#dynamic-collections)
+  - [Event handling](#event-handling)
+  - [Reactive conditional rendering](#reactive-conditional-rendering)
+  - [Composing components](#composing-components)
+  - [Rendering your app](#rendering-your-app)
+- [Example app](#example-app)
+- [Roadmap](#roadmap)
 
 ## Project status
 
-🚧 The project is in early-stage development. It is not yet ready for production use, but you can try it out and give feedback.
+🚧 The project is in early-stage development. It is not yet ready for production use.
+
+Try it, break it, file issues, and send feedback.
 
 ## Installation
 
 [![Clojars Project](https://img.shields.io/clojars/v/org.clojars.mat/bud.svg)](https://clojars.org/org.clojars.mat/bud)
 
 ## Features and usage
+
+The core of Bud consists in just 3 functions, `create-signal`, `reactive-fragment`, and `dom-render`. 
+The rest of the problems to build reactive UIs is built-in for great ergonomics.
+
+ - `create-signal` creates a signal, which is a reactive value that can be used in the DOM.
+ - `reactive-fragment` is a function that takes a function and returns a reactive fragment, which is a piece of DOM that will be updated when the signals it uses change.
+ - `dom-render` is a function that takes a DOM element and a component function, and renders the component into the DOM element.
+
+#### Creating signals (reactive text nodes)
+
+```clojure
+(ns bud.example
+  (:require
+    [bud.core :as bud]))
+
+(defn app []
+  (let [[get! set!] (bud/create-signal "world")]
+    [:h1 "Hello, " get! "!"]))
+```
+
+Text nodes update automatically when signals change.
+
+#### Reactive fragments
+
+```clojure 
+(defn app []
+  (let [[get! _] (bud/create-signal {:value 42})]
+    [:div 
+     [:h1 "Hello, world!"]
+     (bud/reactive-fragment #(vector :h2 (str "Value: " (:value (get!)))))]))
+```
+
+Wrap dynamic expressions in reactive-fragment when they go beyond simple strings/numbers.
+
+#### Dynamic collections
+
+```clojure 
+(defn list-component []
+  (map #(into [] [:div %]) ["a" "b" "c"]))
+```
+
+You can use map, loops, conditionals — it's just Clojure data.
+
+#### Event handling 
+
+```clojure
+(defn app []
+  (let [[getter! setter!] (bud/create-signal "world")]
+    [:div
+     [:input {:type "text"
+              :value getter!
+              :on-input #(setter! (.. % -target -value))}]
+     [:p "Current value: " getter!]]))
+```
+
+Event listeners are auto-wired via :on-*.
+
+#### Reactive conditional rendering 
+
+```clojure 
+(defn app []
+  (let [[get-value! set-value!] (bud/create-signal "world")]
+    [:div
+     (bud/reactive-fragment
+       #(when (= (get-value!) "world")
+          [:p "This only shows if the value is 'world'"]))]))
+```
+
+Only renders when the condition is true — rerenders on signal change.
+
+#### Composing components
+
+```clojure 
+(defn footer-component [value]
+  [:footer
+   [:p "This is a footer component. " value]])
+
+(defn app []
+    (let [[get-value! set-value!] (bud/create-signal "")]
+        [:div
+         [:h1 "Hello, " get-value! "!"]
+         [:input {:type "text"
+                :value get-value!
+                :on-input #(set-value! (.. % -target -value))}]
+         ;; footer component
+         [footer-component get-value!]]))
+```
+
+#### Rendering your app 
+
+```clojure 
+(ns bud.example 
+    (:require
+        [bud.core :as bud]))
+
+;; { ... your app code ... }
+
+(defn ^:dev/after-load start []
+  (let [el (js/document.getElementById "app")]
+    (bud/dom-render el app)))
+```
+
+## Example app
 
 ```clojure
 (ns bud.example

@@ -134,10 +134,6 @@ Only renders when the condition is true — rerenders on signal change.
 <!-- docs for ref attribute just like in React -->
 #### Ref attribute 
 
-You can use the `ref` attribute to get a reference to a DOM element 
-when the component is rendered. This is useful for direct DOM manipulations 
-or integrations with other libraries.
-
 ```clojure
 (defn editor-js []
   (let [editor-instance (atom nil)]
@@ -151,6 +147,22 @@ or integrations with other libraries.
                      (let [e (js/EditorJS. #js {:autofocus true})]
                        (reset! editor-instance e))))}]]))
 ```
+
+You can use the `ref` attribute to get a reference to a DOM element 
+when the component is rendered. This is useful for direct DOM manipulations 
+or integrations with other libraries.
+
+#### Style attribute 
+
+```clojure 
+(defn styled-component []
+  [:div {:style {:color "blue"
+                 :font-size "20px"}}
+   "This is a styled component."
+   [:span {:style "font-weight: bold;"} " Bold text inside."]])
+```
+
+You can use the `style` attribute to apply styles to elements, both string and map are accepted values.
 
 #### Rendering your app 
 

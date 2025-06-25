@@ -232,8 +232,12 @@ or integrations with other libraries.
 
 Roadmap to 0.2.0 (which will be a beta release)
 
+ - [x] Find a good way to manage the `ref` problem for rendering libs in the DOM
+ - [ ] Parse the style attribute to accept both string and maps
+
+Roadmap to 0.3.0
+
  - [ ] Make `reactive-fragment` a macro and improve its ergonomics (and maybe name)
  - [ ] Evaluate when attribute is a signal and decide if it should be reactive or throw an error
- - [ ] Find a good way to manage the `ref` problem for rendering libs in the DOM
- - [ ] Stress test it
+
 

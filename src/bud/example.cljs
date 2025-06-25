@@ -9,10 +9,22 @@
   [:footer {:attr-test (value)}
    [:p "This is a footer component. " value]])
 
+(defn editor-js []
+  (let [editor-instance (atom nil)]
+    [:div
+     [:h2 "EditorJS Example"]
+     [:div {:class "editor-js"
+            :style "text-align: left;"
+            :id "editorjs"
+            :ref (fn [el]
+                   (when el
+                     (let [e (js/EditorJS. #js {:autofocus true})]
+                       (reset! editor-instance e))))}]]))
+
 (defn app []
   (let [[get-value! set-value!] (bud/create-signal {:value "world"})
         [get-string-value! set-string-value!] (bud/create-signal "world")]
-    [:div
+    [:div {:style "text-align: center;"}
      ;; string or number values will be rendered as
      ;; reactive text nodes, so you can use them directly
      [:h1 "Hello, " get-string-value! "!"]
@@ -44,7 +56,8 @@
      (bud/reactive-fragment
        #(when (= (get-string-value!) "world")
           [:div {:attr-test (get-string-value!)}
-           [:p "this only shows if the word in the input is \"world\""]]))]))
+           [:p "this only shows if the word in the input is \"world\""]]))
+     [editor-js]]))
 
 (defn ^:dev/after-load start []
   (t/set-min-level! :warn)

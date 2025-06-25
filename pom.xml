@@ -4,7 +4,7 @@
   <packaging>jar</packaging>
   <groupId>org.clojars.mat</groupId>
   <artifactId>bud</artifactId>
-  <version>0.1.5</version>
+  <version>0.2.0</version>
   <name>bud</name>
   <licenses>
     <license>

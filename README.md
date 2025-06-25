@@ -233,7 +233,7 @@ or integrations with other libraries.
 Roadmap to 0.2.0 (which will be a beta release)
 
  - [x] Find a good way to manage the `ref` problem for rendering libs in the DOM
- - [ ] Parse the style attribute to accept both string and maps
+ - [x] Parse the style attribute to accept both string and maps
 
 Roadmap to 0.3.0
 

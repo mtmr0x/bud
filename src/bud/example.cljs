@@ -27,7 +27,7 @@
     [:div {:style {:text-align "center"
                    :padding "20px"}}
 
-     [:h1
+     [:h1 {:test get-string-value!}
       "Bud Example App"]
      ;; string or number values will be rendered as
      ;; reactive text nodes, so you can use them directly
@@ -55,7 +55,7 @@
      ;; used directly in the DOM as text node. If you
      ;; want to use it as a reactive html attribute,
      ;; follow the example after this one.
-     [footer-component get-value!]
+     [footer-component get-string-value!]
 
      (bud/reactive-fragment
        #(when (= (get-string-value!) "world")

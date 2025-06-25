@@ -44,6 +44,11 @@
           ;; throw an error.
           (doseq [[k v] attrs]
             (cond
+              ;; signal attributes
+              (r/is-signal? v)
+              (r/effect
+                #(let [value (v)]
+                   (.setAttribute el (name k) value)))
               ;; events
               (.startsWith (name k) "on-")
               (.addEventListener el (subs (name k) 3) v)

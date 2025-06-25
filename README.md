@@ -131,6 +131,27 @@ Only renders when the condition is true — rerenders on signal change.
          [footer-component get-value!]]))
 ```
 
+<!-- docs for ref attribute just like in React -->
+#### Ref attribute 
+
+You can use the `ref` attribute to get a reference to a DOM element 
+when the component is rendered. This is useful for direct DOM manipulations 
+or integrations with other libraries.
+
+```clojure
+(defn editor-js []
+  (let [editor-instance (atom nil)]
+    [:div
+     [:h2 "EditorJS Example"]
+     [:div {:class "editor-js"
+            :id "editorjs"
+            :ref (fn [el] ;; ⬅️  ref attribute must a function and 
+                   ;;;;;;;;; it will be called passing the DOM element to it
+                   (when el
+                     (let [e (js/EditorJS. #js {:autofocus true})]
+                       (reset! editor-instance e))))}]]))
+```
+
 #### Rendering your app 
 
 ```clojure 

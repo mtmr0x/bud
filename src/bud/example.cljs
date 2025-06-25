@@ -24,10 +24,14 @@
 (defn app []
   (let [[get-value! set-value!] (bud/create-signal {:value "world"})
         [get-string-value! set-string-value!] (bud/create-signal "world")]
-    [:div {:style "text-align: center;"}
+    [:div {:style {:text-align "center"
+                   :padding "20px"}}
+
+     [:h1
+      "Bud Example App"]
      ;; string or number values will be rendered as
      ;; reactive text nodes, so you can use them directly
-     [:h1 "Hello, " get-string-value! "!"]
+     [:h3 "Hello, " get-string-value! "!"]
 
      ;; when the value of the signal is not a string or a number,
      ;; it will not be rendered as a reactive text node, so you

@@ -239,5 +239,6 @@ Roadmap to 0.3.0
 
  - [ ] Make `reactive-fragment` a macro and improve its ergonomics (and maybe name)
  - [ ] Evaluate when attribute is a signal and decide if it should be reactive or throw an error
+ - [ ] Accept sequences at `:class` attribute
 
 

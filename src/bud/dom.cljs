@@ -44,14 +44,22 @@
           ;; throw an error.
           (doseq [[k v] attrs]
             (cond
+              ;; events
               (.startsWith (name k) "on-")
               (.addEventListener el (subs (name k) 3) v)
+              ;; ref attribute
               (= (name k) "ref")
               (if (fn? v)
                 (v el) ;; call the ref function with the element
                 (do
                   (t/log! :warn "ref function called with element")
                   (js/console.error "ref attribute should be a function, got:" (type v))))
+              ;; style attribute
+              (= (name k) "style")
+              (if (map? v)
+                (doseq [[style-key style-value] v]
+                  (.setProperty (.-style el) (name style-key) style-value))
+                (.setAttribute el "style" v)) ;; fallback to string
               :else
               (.setAttribute el (name k) v)))
           ;; children

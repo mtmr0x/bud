@@ -3,6 +3,8 @@
     [taoensso.telemere :as t]
     [bud.reactive :as r]))
 
+(def dev? ^boolean goog.DEBUG)
+
 (defn render [node]
   (cond
     (instance? js/Node node)
@@ -39,9 +41,6 @@
                                  [nil args])
               el (js/document.createElement (name tag))]
           ;; attributes
-          ;; TODO: check of attr is a signal. If it is,
-          ;; we should either allow reactive update or
-          ;; throw an error.
           (doseq [[k v] attrs]
             (cond
               ;; signal attributes
@@ -86,25 +85,24 @@
         (js/document.createTextNode "")
         (js/document.createTextNode node)))))
 
-;; TODO: make a macro to handle thisreact
 (defn reactive-fragment [compute]
-  (let [container (js/document.createElement "div")
-        child-nodes (atom nil)]
-    (r/effect
-      (fn []
-        (let [new-content (compute)]
-          ;; remove previous children
-          (when @child-nodes
-            (doseq [n @child-nodes]
-              (.remove n)))
-          (let [;; TODO: get the reference so it can be manipulated
-                ;; without needing the container
-                new-el (render new-content)
-                node-list (if (.-childNodes new-el)
-                            (js/Array.from (.-childNodes new-el))
-                            [new-el])]
-            (reset! child-nodes node-list)
-            (set! (.-innerHTML container) "")
-            (.appendChild container new-el)
-            new-el))))
-    container))
+  (let [element-marker (js/document.createComment "bud-fragment")
+        new-el-reference (atom nil)]
+    (js/requestAnimationFrame
+      (fn [_]
+        (r/effect
+          (fn []
+            (let [new-content (compute)]
+              (when (and @new-el-reference
+                         (.-parentElement @new-el-reference))
+                (.removeChild (.-parentElement @new-el-reference) @new-el-reference))
+
+              (let [new-el (render new-content)]
+                (reset! new-el-reference new-el)
+
+                (when (.-parentElement element-marker)
+                  (.insertBefore
+                    (.-parentElement element-marker)
+                    new-el
+                    element-marker))))))))
+    element-marker))

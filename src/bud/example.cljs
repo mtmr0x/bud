@@ -37,7 +37,8 @@
      ;; it will not be rendered as a reactive text node, so you
      ;; need to enclose it in a reactive-fragment
      (bud/reactive-fragment
-       #(do [:h2 (str "This is a reactive app. Current value: " (:value (get-value!)))]) )
+       (fn []
+         [:h2 (str "This is a reactive-fragment Current value: " (:value (get-value!)))]) )
      [:p "Type something below:"]
 
      ;; you can do maps!
@@ -45,10 +46,27 @@
      (map #(into [] [:div %]) '("a" "b" "c" "d" "e"))
 
      [:input {:type "text"
-              :value (:value (get-value!))
+              :value get-string-value!
               :on-input #(do
                             (set-string-value! (.. % -target -value))
                             (set-value! {:value (.. % -target -value)}))}]
+
+     (bud/reactive-fragment
+       (fn []
+          [:div {:id "test"
+                 :attr-test (get-string-value!)}
+           [:div [:div
+                  [:p "fragment value: " (:value (get-value!))]]]
+           [:p
+            "this updates with a more complex signal structure using reactive-fragment. "
+            "The input value is: " (:value (get-value!))]]))
+
+     (bud/reactive-fragment
+       #(when (= (get-string-value!) "world")
+          [:div {:attr-test (get-string-value!)}
+           [:p "this only shows if the word in the input is \"world\""]]))
+
+     [editor-js]
 
      ;; get-value! is a signal, so it will be reactive
      ;; in any inner scope since kept as a signal and
@@ -57,11 +75,7 @@
      ;; follow the example after this one.
      [footer-component get-string-value!]
 
-     (bud/reactive-fragment
-       #(when (= (get-string-value!) "world")
-          [:div {:attr-test (get-string-value!)}
-           [:p "this only shows if the word in the input is \"world\""]]))
-     [editor-js]]))
+     ]))
 
 (defn ^:dev/after-load start []
   (t/set-min-level! :warn)

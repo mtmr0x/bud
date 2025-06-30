@@ -34,7 +34,8 @@ No Virtual DOM, no Shadow DOM, no magic compiler.
 
 ## Project status
 
-🚧 The project is in early-stage development. It is not yet ready for production use.
+🧷 The API is stable and used in production, though not battle-tested yet. 
+Bug fixes, performance tweaks, and features will evolve with real-world use and feedback.
 
 Try it, break it, file issues, and send feedback.
 
@@ -188,7 +189,7 @@ You can use the `style` attribute to apply styles to elements, both string and m
 (defn footer-component [value]
   ;; the value in the attr-test will not be reactive
   ;; unless you use it in side a reactive-fragment
-  [:footer {:attr-test (value)} ;; <- ⚠️  won't be reactive
+  [:footer {:attr-test value} ;; <- if it's a signal, it will be reactive
    [:p "This is a footer component. " value]])
 
 (defn app []
@@ -220,18 +221,18 @@ You can use the `style` attribute to apply styles to elements, both string and m
                             (set-string-value! (.. % -target -value))
                             (set-value! {:value (.. % -target -value)}))}]
 
+     (bud/reactive-fragment
+       #(when (= (get-string-value!) "world")
+          [:div {:attr-test (get-string-value!)}
+           [:p "this only shows if the word in the input is \"world\""]
+           [:p "input value: " get-string-value!]]))
+
      ;; get-value! is a signal, so it will be reactive
      ;; in any inner scope since kept as a signal and
      ;; used directly in the DOM as text node. If you
      ;; want to use it as a reactive html attribute,
      ;; follow the example after this one.
-     [footer-component get-value!]
-
-     (bud/reactive-fragment
-       #(when (= (get-string-value!) "world")
-          [:div {:attr-test (get-string-value!)}
-           [:p "this only shows if the word in the input is \"world\""]
-           [:p "input value: " get-string-value!]]))]))
+     [footer-component get-value!]]))
 
 (defn ^:dev/after-load start []
   (let [el (js/document.getElementById "app")]
@@ -249,8 +250,8 @@ Roadmap to 0.2.0 (which will be a beta release)
 
 Roadmap to 0.3.0
 
- - [ ] Make `reactive-fragment` a macro and improve its ergonomics (and maybe name)
- - [ ] Evaluate when attribute is a signal and decide if it should be reactive or throw an error
+ - [x] Make `reactive-fragment` doesn't return a container div and improve its ergonomics
+ - [x] Evaluate when attribute is a signal and decide if it should be reactive or throw an error
  - [ ] Accept sequences at `:class` attribute
 
 

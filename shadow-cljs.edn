@@ -1,4 +1,4 @@
-{:source-paths
+{:source-path
  ["src"]
 
  :dependencies

@@ -3,7 +3,7 @@
     [clojure.tools.build.api :as b]))
 
 (def lib 'org.clojars.mat/bud)
-(def version "0.3.0")
+(def version "0.3.1")
 (def class-dir "target/classes")
 (def basis (b/create-basis {:project "deps.edn"}))
 

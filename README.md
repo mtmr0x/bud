@@ -252,6 +252,7 @@ Roadmap to 0.3.0
 
  - [x] Make `reactive-fragment` doesn't return a container div and improve its ergonomics
  - [x] Evaluate when attribute is a signal and decide if it should be reactive or throw an error
- - [ ] Accept sequences at `:class` attribute
 
+ Roadmap to 0.4.0
+ - [ ] Wildly test it and fix any bugs
 

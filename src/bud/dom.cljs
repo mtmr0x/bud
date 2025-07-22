@@ -1,6 +1,5 @@
 (ns bud.dom
   (:require
-    [taoensso.telemere :as t]
     [bud.reactive :as r]))
 
 (def dev? ^boolean goog.DEBUG)
@@ -8,23 +7,16 @@
 (defn render [node]
   (cond
     (instance? js/Node node)
-    (do
-      (t/log! :info "rendering prebuilt DOM node")
-      node)
+    node
 
     (string? node)
-    (do
-      (t/log! :info "rendering string node")
-      (js/document.createTextNode node))
+    (js/document.createTextNode node)
 
     (number? node)
-    (do
-      (t/log! :info "rendering number node")
-      (js/document.createTextNode (str node)))
+    (js/document.createTextNode (str node))
 
     (r/is-signal? node)
     (let [el (js/document.createTextNode "")]
-      (t/log! :info "rendering signal node")
       (r/effect
         #(set! (.-textContent el) (node)))
       el)
@@ -55,9 +47,7 @@
               (= (name k) "ref")
               (if (fn? v)
                 (v el) ;; call the ref function with the element
-                (do
-                  (t/log! :warn "ref function called with element")
-                  (js/console.error "ref attribute should be a function, got:" (type v))))
+                (js/console.error "ref attribute should be a function, got:" (type v)))
               ;; style attribute
               (= (name k) "style")
               (if (map? v)
@@ -73,17 +63,14 @@
 
     (seq? node)
     (let [frag (js/DocumentFragment.)]
-      (t/log! :info "rendering seq node")
       (doseq [child node]
         (.appendChild frag (render child)))
       frag)
 
     :else
-    (do
-      (t/log! :info "rendering anything node - defaulting to text")
-      (if (nil? node)
-        (js/document.createTextNode "")
-        (js/document.createTextNode node)))))
+    (if (nil? node)
+      (js/document.createTextNode "")
+      (js/document.createTextNode node))))
 
 (defn reactive-fragment [compute]
   (let [element-marker (js/document.createComment "bud-fragment")
